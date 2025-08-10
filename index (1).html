@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System - Records Viewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>📋 Attendance Records</h1>
+                    <p>View and manage attendance records</p>
+                </div>
+                <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                    <span class="toggle-icon">🌙</span>
+                    <span class="toggle-text">Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <div class="control-item">
+                    <label for="attendanceSelect">Select Attendance Record:</label>
+                    <select id="attendanceSelect" aria-label="Select an attendance record to view">
+                        <option value="">Choose an attendance record...</option>
+                    </select>
+                </div>
+
+                <div class="control-item">
+                    <label for="searchInput">Search Records:</label>
+                    <input type="text" id="searchInput" placeholder="Search by date or name..." aria-label="Search for an attendance record">
+                </div>
+
+                <div class="control-item">
+                    <label>&nbsp;</label>
+                    <button id="refreshButton" class="btn" aria-label="Refresh the list of attendance records">🔄 Refresh</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="messageDisplay" role="alert" aria-live="polite" style="display:none;"></div>
+
+            <div id="noSelection" class="no-selection">
+                <i aria-hidden="true">📄</i>
+                <h3>No Record Selected</h3>
+                <p>Please select an attendance record from the dropdown above to view its contents.</p>
+            </div>
+
+            <div id="loadingMessage" class="loading" style="display: none;">
+                <h3>Loading attendance record...</h3>
+                <p>Please wait while we load the selected file.</p>
+            </div>
+
+            <iframe id="attendanceFrame" class="attendance-frame" style="display: none;"
+                    title="Attendance Record Viewer" aria-label="Content of the selected attendance file"></iframe>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
