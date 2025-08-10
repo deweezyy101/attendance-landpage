@@ -3,41 +3,7 @@
   "lastUpdated": "2024-01-15T10:00:00Z",
   "description": "Manifest file for attendance records - update this file when adding new attendance HTML files",
   "files": [
-    {
-      "filename": "attendance-2025-07-27.html",
-      "title": "Attendance Foundry - July 27, 25",
-      "date": "2025-07-27",
-      "description": "Foundry Battle",
-      "category": "foundry"
-    },
-    {
-      "filename": "attendance-2025-07-13.html",
-      "title": "Attendance Foundry - July 13, 25",
-      "date": "2025-07-13",
-      "description": "Foundry Battle",
-      "category": "foundry"
-    },
-    {
-      "filename": "attendance-2025-07-12.html",
-      "title": "Attendance Canyon - July 12, 25",
-      "date": "2025-07-12",
-      "description": "Canyon Battle",
-      "category": "canyon"
-    },
-    {
-      "filename": "attendance-2025-06-29.html",
-      "title": "Attendance Foundry - June 29, 25",
-      "date": "2025-06-29",
-      "description": "Foundry Battle",
-      "category": "foundry"
-    },
-    {
-      "filename": "attendance-2025-06-15.html",
-      "title": "Attendance Foundry - June 15, 25",
-      "date": "2025-06-15",
-      "description": "Foundry Battle",
-      "category": "foundry"
-    },
+
     {
       "filename": "attendance-2025-08-09.html",
       "title": "Attendance Canyon - August 9, 25",
