@@ -2,12 +2,16 @@
 let attendanceFiles = [];
 let filteredFiles = [];
 let isDarkMode = false;
+let currentCategory = '';
+let isFullscreen = false;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     initializeDarkMode();
     loadAttendanceFiles();
     setupEventListeners();
+    setupKeyboardShortcuts();
+    updateHeaderStats();
 });
 
 // Dark Mode Management
@@ -61,9 +65,17 @@ function toggleDarkMode() {
 // Set up event listeners
 function setupEventListeners() {
     const attendanceSelect = document.getElementById('attendanceSelect');
+    const categoryFilter = document.getElementById('categoryFilter');
     const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
     const refreshButton = document.getElementById('refreshButton');
+    const exportButton = document.getElementById('exportButton');
     const darkModeToggle = document.getElementById('darkModeToggle');
+    const helpButton = document.getElementById('helpButton');
+    const closeHelpModal = document.getElementById('closeHelpModal');
+    const helpModal = document.getElementById('helpModal');
+    const fullscreenButton = document.getElementById('fullscreenButton');
+    const printButton = document.getElementById('printButton');
 
     attendanceSelect.addEventListener('change', function() {
         const selectedFile = this.value;
@@ -74,17 +86,31 @@ function setupEventListeners() {
         }
     });
 
+    categoryFilter.addEventListener('change', function() {
+        currentCategory = this.value;
+        filterFiles();
+    });
+
     searchInput.addEventListener('input', function() {
-        filterFiles(this.value);
+        filterFiles();
+    });
+
+    clearSearch.addEventListener('click', function() {
+        searchInput.value = '';
+        filterFiles();
+        searchInput.focus();
     });
 
     refreshButton.addEventListener('click', refreshRecords);
 
+    if (exportButton) {
+        exportButton.addEventListener('click', exportCurrentRecord);
+        console.log('Export button event listener added');
+    }
+
     // Dark mode toggle
     if (darkModeToggle) {
         darkModeToggle.addEventListener('click', toggleDarkMode);
-
-        // Keyboard accessibility
         darkModeToggle.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -92,6 +118,68 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Help modal
+    if (helpButton) {
+        helpButton.addEventListener('click', showHelpModal);
+        helpButton.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                showHelpModal();
+            }
+        });
+    }
+
+    if (closeHelpModal) {
+        closeHelpModal.addEventListener('click', hideHelpModal);
+    }
+
+    if (helpModal) {
+        helpModal.addEventListener('click', function(e) {
+            if (e.target === helpModal) {
+                hideHelpModal();
+            }
+        });
+    }
+
+    // Fullscreen and print buttons
+    if (fullscreenButton) {
+        fullscreenButton.addEventListener('click', toggleFullscreen);
+    }
+
+    if (printButton) {
+        printButton.addEventListener('click', printCurrentRecord);
+    }
+
+    // Close modal on escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideHelpModal();
+        }
+    });
+}
+
+// Keyboard shortcuts
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + K to focus search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('searchInput').focus();
+        }
+        
+        // Ctrl/Cmd + F to toggle fullscreen
+        if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+            e.preventDefault();
+            toggleFullscreen();
+        }
+        
+        // Ctrl/Cmd + P to print
+        if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+            e.preventDefault();
+            printCurrentRecord();
+        }
+    });
 }
 
 // Load and discover attendance files
@@ -107,6 +195,8 @@ async function loadAttendanceFiles() {
         filteredFiles = [...attendanceFiles];
 
         populateDropdown();
+        populateCategoryFilter();
+        updateHeaderStats();
         hideMessage();
 
         if (attendanceFiles.length === 0) {
@@ -137,6 +227,9 @@ async function getAttendanceFilesList() {
 async function discoverFiles() {
     // Fallback: For GitHub Pages compatibility, check for files using a predefined list
     const potentialFiles = [
+        'attendance-2025-08-10.html',
+        'attendance-2025-08-09.html',
+        'attendance-2025-07-27.html',
         'attendance-2025-07-13.html',
         'attendance-2025-07-12.html',
         'attendance-2025-06-29.html',
@@ -173,7 +266,6 @@ async function discoverFiles() {
 
     return existingFiles;
 }
-
 
 // Validate and format files from manifest
 async function validateAndFormatManifestFiles(manifestFiles) {
@@ -261,21 +353,57 @@ function populateDropdown() {
         const option = document.createElement('option');
         option.value = file.filename;
         option.textContent = file.displayName;
+        if (file.description) {
+            option.title = file.description;
+        }
         select.appendChild(option);
     });
 }
 
-// Filter files based on search input
-function filterFiles(searchTerm) {
-    if (!searchTerm.trim()) {
-        filteredFiles = [...attendanceFiles];
-    } else {
-        const term = searchTerm.toLowerCase();
-        filteredFiles = attendanceFiles.filter(file =>
-            file.displayName.toLowerCase().includes(term) ||
-            file.filename.toLowerCase().includes(term)
-        );
+// Populate category filter
+function populateCategoryFilter() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    const categories = new Set();
+    
+    attendanceFiles.forEach(file => {
+        if (file.category) {
+            categories.add(file.category);
+        }
+    });
+
+    // Clear existing options except the first one
+    while (categoryFilter.children.length > 1) {
+        categoryFilter.removeChild(categoryFilter.lastChild);
     }
+
+    // Add categories
+    Array.from(categories).sort().forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = formatCategoryName(category);
+        categoryFilter.appendChild(option);
+    });
+}
+
+// Format category name for display
+function formatCategoryName(category) {
+    return category.charAt(0).toUpperCase() + category.slice(1);
+}
+
+// Filter files based on search input and category
+function filterFiles() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    
+    filteredFiles = attendanceFiles.filter(file => {
+        const matchesSearch = !searchTerm || 
+            file.displayName.toLowerCase().includes(searchTerm) ||
+            file.filename.toLowerCase().includes(searchTerm) ||
+            (file.description && file.description.toLowerCase().includes(searchTerm));
+        
+        const matchesCategory = !currentCategory || file.category === currentCategory;
+        
+        return matchesSearch && matchesCategory;
+    });
 
     populateDropdown();
 
@@ -286,6 +414,23 @@ function filterFiles(searchTerm) {
         select.value = '';
         showNoSelection();
     }
+
+    updateHeaderStats();
+}
+
+// Update header statistics
+function updateHeaderStats() {
+    const totalRecords = document.getElementById('totalRecords');
+    const totalCategories = document.getElementById('totalCategories');
+    
+    if (totalRecords) {
+        totalRecords.textContent = attendanceFiles.length;
+    }
+    
+    if (totalCategories) {
+        const categories = new Set(attendanceFiles.map(f => f.category).filter(Boolean));
+        totalCategories.textContent = categories.size;
+    }
 }
 
 // Load and display selected attendance record
@@ -293,10 +438,13 @@ function loadAttendanceRecord(filename) {
     showLoading();
 
     const iframe = document.getElementById('attendanceFrame');
+    const selectedFile = attendanceFiles.find(f => f.filename === filename);
+    
     iframe.src = filename;
 
     iframe.onload = function() {
         showAttendanceFrame();
+        updateCurrentRecordInfo(selectedFile);
         // Apply dark mode to the loaded iframe content
         setTimeout(() => applyDarkModeToIframe(), 100);
     };
@@ -304,6 +452,26 @@ function loadAttendanceRecord(filename) {
     iframe.onerror = function() {
         showMessage(`Error loading attendance record: ${filename}`, 'error');
     };
+}
+
+// Update current record information
+function updateCurrentRecordInfo(file) {
+    const titleElement = document.getElementById('currentRecordTitle');
+    const dateElement = document.getElementById('currentRecordDate');
+    
+    if (titleElement && file) {
+        titleElement.textContent = file.displayName;
+    }
+    
+    if (dateElement && file && file.date) {
+        const date = new Date(file.date);
+        dateElement.textContent = date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            timeZone: 'UTC'
+        });
+    }
 }
 
 // Apply dark mode styles to iframe content
@@ -488,22 +656,296 @@ function applyDarkModeToIframe() {
 function showNoSelection() {
     document.getElementById('noSelection').style.display = 'block';
     document.getElementById('loadingMessage').style.display = 'none';
-    document.getElementById('attendanceFrame').style.display = 'none';
+    document.getElementById('attendanceContainer').style.display = 'none';
     hideMessage();
 }
 
 function showLoading() {
     document.getElementById('noSelection').style.display = 'none';
     document.getElementById('loadingMessage').style.display = 'block';
-    document.getElementById('attendanceFrame').style.display = 'none';
+    document.getElementById('attendanceContainer').style.display = 'none';
     hideMessage();
 }
 
 function showAttendanceFrame() {
     document.getElementById('noSelection').style.display = 'none';
     document.getElementById('loadingMessage').style.display = 'none';
-    document.getElementById('attendanceFrame').style.display = 'block';
+    document.getElementById('attendanceContainer').style.display = 'block';
     hideMessage();
+}
+
+// Help modal functions
+function showHelpModal() {
+    const modal = document.getElementById('helpModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.focus();
+    }
+}
+
+function hideHelpModal() {
+    const modal = document.getElementById('helpModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Fullscreen functions
+function toggleFullscreen() {
+    const iframe = document.getElementById('attendanceFrame');
+    const fullscreenButton = document.getElementById('fullscreenButton');
+    
+    if (!iframe) return;
+    
+    if (!isFullscreen) {
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) {
+            iframe.msRequestFullscreen();
+        }
+        isFullscreen = true;
+        if (fullscreenButton) {
+            fullscreenButton.innerHTML = '<span class="btn-icon">⛶</span><span class="btn-text">Exit Fullscreen</span>';
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        isFullscreen = false;
+        if (fullscreenButton) {
+            fullscreenButton.innerHTML = '<span class="btn-icon">⛶</span><span class="btn-text">Fullscreen</span>';
+        }
+    }
+}
+
+// Print function
+function printCurrentRecord() {
+    const iframe = document.getElementById('attendanceFrame');
+    if (iframe && iframe.src) {
+        const printWindow = window.open(iframe.src, '_blank');
+        if (printWindow) {
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        }
+    } else {
+        showMessage('No record selected to print', 'error');
+    }
+}
+
+// Export function
+async function exportCurrentRecord() {
+    console.log('Export function called'); // Debug log
+    
+    const selectedFile = document.getElementById('attendanceSelect').value;
+    if (!selectedFile) {
+        showMessage('No record selected to export', 'error');
+        return;
+    }
+    
+    const exportButton = document.getElementById('exportButton');
+    const originalText = exportButton.innerHTML;
+    
+    try {
+        // Show loading state
+        exportButton.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Generating...</span>';
+        exportButton.disabled = true;
+        
+        showMessage('Generating PNG export...', 'info');
+        
+        // Try direct export first (for same-origin files)
+        const iframe = document.getElementById('attendanceFrame');
+        if (iframe && iframe.src) {
+            try {
+                // Load html2canvas library dynamically if not already loaded
+                if (typeof html2canvas === 'undefined') {
+                    await loadHtml2Canvas();
+                }
+
+                // Try to access iframe content
+                let iframeDoc, iframeBody;
+                try {
+                    iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    iframeBody = iframeDoc.body;
+                } catch (error) {
+                    console.error('Cannot access iframe content due to CORS:', error);
+                    throw new Error('CORS_BLOCKED');
+                }
+
+                if (!iframeBody) {
+                    throw new Error('NO_IFRAME_BODY');
+                }
+
+                // Create export options
+                const exportOptions = {
+                    allowTaint: true,
+                    useCORS: true,
+                    scale: 2, // Higher quality
+                    backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
+                    width: iframeBody.scrollWidth,
+                    height: iframeBody.scrollHeight,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: iframeBody.scrollWidth,
+                    windowHeight: iframeBody.scrollHeight
+                };
+
+                // Generate the canvas
+                const canvas = await html2canvas(iframeBody, exportOptions);
+                
+                // Convert to PNG and download
+                const selectedFileInfo = attendanceFiles.find(f => f.filename === selectedFile);
+                const fileName = selectedFileInfo ? 
+                    selectedFileInfo.displayName.replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '_') : 
+                    'attendance_record';
+                
+                downloadCanvasAsPNG(canvas, `${fileName}_export.png`);
+                
+                showMessage('PNG export completed successfully!', 'info');
+                return;
+                
+            } catch (error) {
+                console.error('Direct export failed:', error);
+                if (error.message === 'CORS_BLOCKED') {
+                    // Fall back to alternative method
+                    await exportUsingAlternativeMethod(selectedFile);
+                    return;
+                }
+                throw error;
+            }
+        }
+        
+        // If no iframe or iframe failed, use alternative method
+        await exportUsingAlternativeMethod(selectedFile);
+        
+    } catch (error) {
+        console.error('Export error:', error);
+        showMessage('Error generating PNG export. Please try again.', 'error');
+    } finally {
+        // Restore button state
+        exportButton.innerHTML = originalText;
+        exportButton.disabled = false;
+    }
+}
+
+// Alternative export method
+async function exportUsingAlternativeMethod(selectedFile) {
+    const selectedFileInfo = attendanceFiles.find(f => f.filename === selectedFile);
+    const fileName = selectedFileInfo ? selectedFileInfo.displayName : 'attendance_record';
+    
+    // Show user options
+    const userChoice = confirm(
+        'Automatic PNG export is not available due to security restrictions.\n\n' +
+        'Would you like to:\n' +
+        '1. Open the record in a new window for manual save/print\n' +
+        '2. Try a different export method\n\n' +
+        'Click OK to open in new window, Cancel to try alternative method.'
+    );
+    
+    if (userChoice) {
+        // Open in new window for manual save
+        const newWindow = window.open(selectedFile, '_blank');
+        if (newWindow) {
+            showMessage('Record opened in new window. Use browser save/print functions.', 'info');
+        } else {
+            showMessage('Popup blocked. Please allow popups and try again.', 'error');
+        }
+    } else {
+        // Try alternative method - create a simple export
+        await createSimpleExport(selectedFile, fileName);
+    }
+}
+
+// Create a simple export using fetch
+async function createSimpleExport(selectedFile, fileName) {
+    try {
+        showMessage('Creating alternative export...', 'info');
+        
+        // Fetch the HTML content
+        const response = await fetch(selectedFile);
+        if (!response.ok) {
+            throw new Error('Failed to fetch file content');
+        }
+        
+        const htmlContent = await response.text();
+        
+        // Create a new window with the content
+        const exportWindow = window.open('', '_blank');
+        if (!exportWindow) {
+            showMessage('Popup blocked. Please allow popups and try again.', 'error');
+            return;
+        }
+        
+        // Write the content to the new window
+        exportWindow.document.write(htmlContent);
+        exportWindow.document.close();
+        
+        // Wait for content to load
+        exportWindow.onload = function() {
+            showMessage('Export window ready. Use browser save/print functions.', 'info');
+        };
+        
+    } catch (error) {
+        console.error('Alternative export failed:', error);
+        showMessage('Alternative export failed. Please try opening the record manually.', 'error');
+    }
+}
+
+// Load html2canvas library dynamically
+async function loadHtml2Canvas() {
+    return new Promise((resolve, reject) => {
+        if (typeof html2canvas !== 'undefined') {
+            resolve();
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script.integrity = 'sha512-BNaRQnYzYi2kqQfW7uWg0J/Vm9XxJpKqVhF7XEVt9Gr8Rfs4Vx9i5Y8bwm0YXY5TavjHqoQhSqpR+0A6Y2w==';
+        script.crossOrigin = 'anonymous';
+        
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('Failed to load html2canvas library'));
+        
+        document.head.appendChild(script);
+    });
+}
+
+// Download canvas as PNG
+function downloadCanvasAsPNG(canvas, filename) {
+    try {
+        // Convert canvas to blob
+        canvas.toBlob((blob) => {
+            if (!blob) {
+                showMessage('Error creating PNG file', 'error');
+                return;
+            }
+
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up
+            URL.revokeObjectURL(url);
+        }, 'image/png', 0.95);
+        
+    } catch (error) {
+        console.error('Download error:', error);
+        showMessage('Error downloading PNG file', 'error');
+    }
 }
 
 // Message display functions
@@ -529,14 +971,25 @@ function hideMessage() {
     }
 }
 
+// Test function for debugging
+function testExport() {
+    console.log('Test export function called');
+    console.log('exportCurrentRecord function exists:', typeof exportCurrentRecord);
+    console.log('Export button exists:', !!document.getElementById('exportButton'));
+    console.log('Selected file:', document.getElementById('attendanceSelect').value);
+}
+
 // Refresh records function
 function refreshRecords() {
     const select = document.getElementById('attendanceSelect');
     const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
 
     // Reset UI
     select.value = '';
     searchInput.value = '';
+    categoryFilter.value = '';
+    currentCategory = '';
     showNoSelection();
 
     // Reload files
