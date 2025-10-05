@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Report - ICE - FOUNDRY L2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .stats {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .present { color: #4CAF50; font-weight: bold; }
+        .absent { color: #f44336; font-weight: bold; }
+        .not-recorded { color: #9e9e9e; font-weight: bold; }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Attendance Report</h1>
+        <h2>ICE - FOUNDRY L2</h2>
+    </div>
+    
+    <div class="stats">
+        <h3>Summary</h3>
+        <p><strong>Event Type:</strong> Crazy Joe</p>
+        <p><strong>Event Date:</strong> 2025-10-05</p>
+        <p><strong>Export Date:</strong> 2025-10-05 20:52:42</p>
+        <p><strong>Total Players:</strong> 25</p>
+        <p>
+            <span class="present">Present: 23</span> | 
+            <span class="absent">Absent: 2</span>
+        </p>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>FID</th>
+                <th>Nickname</th>
+                <th>Status</th>
+                <th>Points</th>
+                <th>Last Event Attendance</th>
+                <th>Marked By</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>108438521</td>
+                <td>DAYCO</td>
+                <td class="present">Present</td>
+                <td>3,087,883</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>123471121</td>
+                <td>ŤħèÑẽŴŵŒřĎ</td>
+                <td class="present">Present</td>
+                <td>2,165,862</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>84924846</td>
+                <td>Plague Doctor</td>
+                <td class="present">Present</td>
+                <td>2,023,599</td>
+                <td>Absent (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>142991184</td>
+                <td>ʀɨօ ʍǟʀȶɨռ ˣᵒˣᵒღ</td>
+                <td class="present">Present</td>
+                <td>1,541,143</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>123919193</td>
+                <td>Elii</td>
+                <td class="present">Present</td>
+                <td>1,126,441</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>110368881</td>
+                <td>AngryBabyErin</td>
+                <td class="present">Present</td>
+                <td>1,015,546</td>
+                <td>New Player</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>124129825</td>
+                <td>Uuouhh</td>
+                <td class="present">Present</td>
+                <td>752,023</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>144776948</td>
+                <td>Şir</td>
+                <td class="present">Present</td>
+                <td>669,519</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>144515507</td>
+                <td>ChickenNugget˙ᵕ˙</td>
+                <td class="present">Present</td>
+                <td>534,244</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>143663031</td>
+                <td>Banza</td>
+                <td class="present">Present</td>
+                <td>463,385</td>
+                <td>Present (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>122881904</td>
+                <td>BabyWolfyy</td>
+                <td class="present">Present</td>
+                <td>463,010</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>146480674</td>
+                <td>ᴋᴏʀᴀ ༝༚༝༚</td>
+                <td class="present">Present</td>
+                <td>430,181</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>143892025</td>
+                <td>Deweezy101 ˙ᵕ˙</td>
+                <td class="present">Present</td>
+                <td>371,771</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>138443142</td>
+                <td>BabyFinn</td>
+                <td class="present">Present</td>
+                <td>368,296</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>121238805</td>
+                <td>Dj25</td>
+                <td class="present">Present</td>
+                <td>333,262</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>179952739</td>
+                <td>almalki</td>
+                <td class="present">Present</td>
+                <td>265,213</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>145104328</td>
+                <td>LadyCassie</td>
+                <td class="present">Present</td>
+                <td>256,655</td>
+                <td>Present (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>146797873</td>
+                <td>Ronෆ</td>
+                <td class="present">Present</td>
+                <td>230,376</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>108126867</td>
+                <td>h0kum</td>
+                <td class="present">Present</td>
+                <td>226,855</td>
+                <td>Present (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>150376582</td>
+                <td>奧德賽</td>
+                <td class="present">Present</td>
+                <td>197,681</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>150786550</td>
+                <td>Rysia</td>
+                <td class="present">Present</td>
+                <td>188,522</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>121737795</td>
+                <td>Erma</td>
+                <td class="present">Present</td>
+                <td>169,185</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>148738586</td>
+                <td>Jaimahakaal</td>
+                <td class="present">Present</td>
+                <td>10,230</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>148688941</td>
+                <td>Kiwulll</td>
+                <td class="absent">Absent</td>
+                <td>0</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>147023070</td>
+                <td>라스트워_Lastwar</td>
+                <td class="absent">Absent</td>
+                <td>0</td>
+                <td>Not Recorded (09/21)</td>
+                <td>deweezy101</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="footer">
+        <p>Generated by Whiteout Discord Bot</p>
+    </div>
+</body>
+</html>
