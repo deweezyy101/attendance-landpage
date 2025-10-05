@@ -101,7 +101,14 @@
       "date": "2025-10-4",
       "description": "Canyon Battle",
       "category": "canyon"
-    }
+    },
+    {
+      "filename": "attendance-L2-2025-10-05.html",
+      "title": "Attendance Foundry - October 05, 25",
+      "date": "2025-10-05",
+      "description": "Foundry Battle",
+      "category": "foundry"
+   }
   ],
   "categories": {
     "foundry": "Foundry Battle",
