@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Report - ICE - CANYON L2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .stats {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .present { color: #4CAF50; font-weight: bold; }
+        .absent { color: #f44336; font-weight: bold; }
+        .not-recorded { color: #9e9e9e; font-weight: bold; }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Attendance Report</h1>
+        <h2>ICE - CANYON L2</h2>
+    </div>
+    
+    <div class="stats">
+        <h3>Summary</h3>
+        <p><strong>Event Type:</strong> Other</p>
+        <p><strong>Event Date:</strong> 2025-11-01</p>
+        <p><strong>Export Date:</strong> 2025-11-02 08:32:54</p>
+        <p><strong>Total Players:</strong> 18</p>
+        <p>
+            <span class="present">Present: 16</span> | 
+            <span class="absent">Absent: 2</span>
+        </p>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>FID</th>
+                <th>Nickname</th>
+                <th>Status</th>
+                <th>Points</th>
+                <th>Last Event Attendance</th>
+                <th>Marked By</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>123061516</td>
+                <td>ＪＯＫＥＲ『᥊ꪑ』</td>
+                <td class="present">Present</td>
+                <td>593,428</td>
+                <td>Absent (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>114241345</td>
+                <td>ᶦ ᵃᵐ ᏦᎯᏦᎯᏒᎧᏖ『᥊ꪑ』</td>
+                <td class="present">Present</td>
+                <td>554,078</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>94617501</td>
+                <td>EAGLE CLAW</td>
+                <td class="present">Present</td>
+                <td>552,177</td>
+                <td>New Player</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>125817661</td>
+                <td>Awhila</td>
+                <td class="present">Present</td>
+                <td>537,937</td>
+                <td>Not Recorded (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>100385556</td>
+                <td>Yacine`</td>
+                <td class="present">Present</td>
+                <td>535,877</td>
+                <td>Absent (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>97958395</td>
+                <td>༒ᴊᴇʀʀʏ곰</td>
+                <td class="present">Present</td>
+                <td>476,391</td>
+                <td>Not Recorded (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>143663031</td>
+                <td>Banza</td>
+                <td class="present">Present</td>
+                <td>432,709</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>95188283</td>
+                <td>ĐᎯɣҜøỢǿ ᵇʲᵏ</td>
+                <td class="present">Present</td>
+                <td>422,563</td>
+                <td>New Player</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>97565268</td>
+                <td>QuennOfDarkness</td>
+                <td class="present">Present</td>
+                <td>387,496</td>
+                <td>New Player</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>123868031</td>
+                <td>Mohit</td>
+                <td class="present">Present</td>
+                <td>287,371</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>143842836</td>
+                <td>Sumi ʚїɞ</td>
+                <td class="present">Present</td>
+                <td>275,286</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>145104328</td>
+                <td>LadyCassie</td>
+                <td class="present">Present</td>
+                <td>204,641</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>108126867</td>
+                <td>h0kum</td>
+                <td class="present">Present</td>
+                <td>88,683</td>
+                <td>New Player</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>143531615</td>
+                <td>Maksimka</td>
+                <td class="present">Present</td>
+                <td>63,322</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>148279381</td>
+                <td>magek</td>
+                <td class="present">Present</td>
+                <td>57,450</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>150758715</td>
+                <td>༺BebeÍseldur༻</td>
+                <td class="present">Present</td>
+                <td>56,476</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>84924846</td>
+                <td>Plague Doctor</td>
+                <td class="absent">Absent</td>
+                <td>0</td>
+                <td>New Player</td>
+                <td>deweezy101</td>
+            </tr>
+            <tr>
+                <td>116010843</td>
+                <td>ᶦ ᵃᵐ ᏨᎻᎥᏨᎻᎥ『᥊ꪑ』</td>
+                <td class="absent">Absent</td>
+                <td>0</td>
+                <td>Present (09/06)</td>
+                <td>deweezy101</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="footer">
+        <p>Generated by Whiteout Discord Bot</p>
+    </div>
+</body>
+</html>
