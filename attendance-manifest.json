@@ -157,6 +157,20 @@
       "date": "2025-11-02",
       "description": "Foundry Battle",
       "category": "foundry"
+   },
+    {
+      "filename": "attendance-2025-12-14.html",
+      "title": "Attendance Foundry - December 14, 25",
+      "date": "2025-12-14",
+      "description": "Foundry Battle",
+      "category": "foundry"
+   },
+    {
+      "filename": "attendance-L2-2025-12-14.html",
+      "title": "Attendance Foundry - December 14, 25",
+      "date": "2025-12-14",
+      "description": "Foundry Battle",
+      "category": "foundry"
    }
   ],
   "categories": {
